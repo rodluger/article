@@ -12,6 +12,7 @@ tectonic_yml = paths.user().repo / "tectonic.yml"
 if not tectonic_yml.exists():
     tectonic_yml = paths.showyourwork().envs / "tectonic.yml"
 
+
 rule:
     """
     Setup the temporary files for compilation.
@@ -25,18 +26,21 @@ rule:
         config["ms_tex"],
         config["dependencies"][config["ms_tex"]],
         config["tex_files_in"],
-        "dag.pdf" if config["dag"]["render"] else [],  # TODO(dfm): remove this?
+        ("dag.pdf" if config["dag"]["render"] else []),  # TODO(dfm): remove this?
         WORKFLOW_GRAPH,
         "showyourwork.yml",
-        "zenodo.yml" if (paths.user().repo / "zenodo.yml").exists() else [],
-        stylesheet=(paths.showyourwork().resources / "styles" / "build.tex").as_posix()
+        ("zenodo.yml" if (paths.user().repo / "zenodo.yml").exists() else []),
+        stylesheet=(
+            paths.showyourwork().resources / "styles" / "build.tex"
+        ).as_posix(),
     output:
         temporary_tex_files(),
         compile_dir=directory(paths.user().compile.as_posix()),
     params:
-        metadata=True
+        metadata=True,
     script:
         "../scripts/compile_setup.py"
+
 
 rule:
     """
@@ -50,19 +54,19 @@ rule:
     input:
         temporary_tex_files(),
         # TODO(dfm): Can probably remove the following once stylesheet is rm'd
-        "dag.pdf" if config["dag"]["render"] else [],
+        ("dag.pdf" if config["dag"]["render"] else []),
         WORKFLOW_GRAPH,
         "showyourwork.yml",
-        "zenodo.yml" if (paths.user().repo / "zenodo.yml").exists() else [],
-        compile_dir=paths.user().compile.as_posix()
+        ("zenodo.yml" if (paths.user().repo / "zenodo.yml").exists() else []),
+        compile_dir=paths.user().compile.as_posix(),
     output:
         (paths.user().compile / f'{config["ms_name"]}.pdf').as_posix(),
         (paths.user().compile / f'{config["ms_name"]}.synctex.gz').as_posix(),
     conda:
         tectonic_yml.as_posix()
     params:
-        maybe_synctex="--synctex" if config["synctex"] else "",
-        user_args=" ".join(config["user_args"])
+        maybe_synctex=("--synctex" if config["synctex"] else ""),
+        user_args=" ".join(config["user_args"]),
     shell:
         """
         cd "{input.compile_dir}"
@@ -75,8 +79,10 @@ rule:
             "{input[0]}"
         """
 
+
 # TODO: Add config options for verbosity?
 # See config.py and old tex.py for missing configs.
+
 
 rule:
     name:
@@ -84,13 +90,14 @@ rule:
     message:
         "Copying the article PDF..."
     input:
-        (paths.user().compile / f'{config["ms_name"]}.pdf').as_posix()
+        (paths.user().compile / f'{config["ms_name"]}.pdf').as_posix(),
     output:
-        config["ms_pdf"]
+        config["ms_pdf"],
     shell:
         """
         cp "{input}" "{output}"
         """
+
 
 rule:
     name:
@@ -98,13 +105,14 @@ rule:
     message:
         "Copying the article synctex..."
     input:
-        (paths.user().compile / f'{config["ms_name"]}.synctex.gz').as_posix()
+        (paths.user().compile / f'{config["ms_name"]}.synctex.gz').as_posix(),
     output:
-        config["ms_name"] + ".synctex.gz"
+        config["ms_name"] + ".synctex.gz",
     shell:
         """
         cp "{input}" "{output}"
         """
+
 
 rule:
     """
@@ -117,6 +125,6 @@ rule:
         "Generating the article PDF..."
     input:
         config["ms_pdf"],
-        (config["ms_name"] + ".synctex.gz" if config["synctex"] else [])
+        (config["ms_name"] + ".synctex.gz" if config["synctex"] else []),
     output:
-        touch(paths.user().flags / "SYW__COMPILE")
+        touch(paths.user().flags / "SYW__COMPILE"),

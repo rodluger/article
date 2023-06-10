@@ -9,6 +9,7 @@ from showyourwork import paths
 # All figure output files
 figures = config["tree"]["figures"].keys()
 
+
 rule:
     """
     Render the article DAG.
@@ -22,9 +23,9 @@ rule:
         config["ms_tex"],
         config["dependencies"][config["ms_tex"]],
         WORKFLOW_GRAPH,
-        "showyourwork.yml"
+        "showyourwork.yml",
     output:
-       "dag.pdf"
+        "dag.pdf",
     conda:
         (paths.showyourwork().envs / "render_dag.yml").as_posix()
     params:

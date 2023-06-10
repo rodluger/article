@@ -1,6 +1,7 @@
 from pathlib import Path
 from showyourwork import paths
 
+
 def temporary_tex_files(root=paths.user().compile):
     files = [
         Path(config["ms_tex"]).relative_to(

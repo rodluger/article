@@ -8,7 +8,10 @@ itself.
 """
 from showyourwork import paths, logging
 from showyourwork.config import get_upstream_dependencies
-from showyourwork.patches import get_snakemake_variable, patch_snakemake_cache_optimization
+from showyourwork.patches import (
+    get_snakemake_variable,
+    patch_snakemake_cache_optimization,
+)
 from showyourwork.zenodo import get_dataset_urls
 import snakemake
 import os
@@ -47,7 +50,6 @@ def infer_additional_figure_dependencies():
     # so we can add all the necessary margin icons
     recursive_dependencies = config["dag_dependencies_recursive"]
     for label, value in config["tree"]["figures"].items():
-
         # Recursively check figure dependencies for additional datasets
         datasets = value["datasets"]
         dependencies = value["dependencies"]
@@ -142,7 +144,9 @@ def infer_variable_provenance(dag):
             # Find the job (and rule) that generates `file`
             if file in [Path(str(file)).resolve() for file in job.output]:
                 # Get the path to the Snakefile that defines that rule
-                rulepath = str(Path(job.rule.snakefile).relative_to(paths.user().repo))
+                rulepath = str(
+                    Path(job.rule.snakefile).relative_to(paths.user().repo)
+                )
                 # Try to find the line number; if we can't, simply link to the
                 # Snakefile, without line number highlighting
                 with open(job.rule.snakefile, "r") as f:
@@ -173,14 +177,12 @@ def WORKFLOW_GRAPH(*args):
     dag = get_snakemake_variable("dag", None)
 
     if dag is None:
-
         # Fail with a warning
         logger.warning(
             "Unable to query the DAG. Functionality will be limited."
         )
 
     else:
-
         # Add dependency information to the global config
         add_dag_metadata_to_config(dag)
 
@@ -209,7 +211,6 @@ checkpoint:
         "syw__dag"
     message:
         "Building the workflow graph..."
-    priority:
-        snakemake.jobs.Job.HIGHEST_PRIORITY
+    priority: snakemake.jobs.Job.HIGHEST_PRIORITY
     output:
-        touch(paths.user().flags / "SYW__DAG")
+        touch(paths.user().flags / "SYW__DAG"),

@@ -18,3 +18,7 @@ repos:
     rev: "v2.1.5"
     hooks:
       - id: pycln
+  - repo: https://github.com/snakemake/snakefmt
+    rev: "v0.8.4"
+    hooks:
+      - id: "snakefmt"

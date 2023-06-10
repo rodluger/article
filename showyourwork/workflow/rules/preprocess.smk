@@ -14,6 +14,7 @@ tectonic_yml = paths.user().repo / "tectonic.yml"
 if not tectonic_yml.exists():
     tectonic_yml = paths.showyourwork().envs / "tectonic.yml"
 
+
 rule:
     """
     Setup the temporary files for compilation.
@@ -28,14 +29,17 @@ rule:
         config["tex_files_in"],
         "showyourwork.yml",
         "zenodo.yml" if (paths.user().repo / "zenodo.yml").exists() else [],
-        stylesheet=(paths.showyourwork().resources / "styles" / "preprocess.tex").as_posix()
+        stylesheet=(
+            paths.showyourwork().resources / "styles" / "preprocess.tex"
+        ).as_posix(),
     output:
         temporary_tex_files(root=paths.user().preprocess),
         compile_dir=directory(paths.user().preprocess.as_posix()),
     params:
-        metadata=False
+        metadata=False,
     script:
         "../scripts/compile_setup.py"
+
 
 rule:
     """
@@ -49,13 +53,13 @@ rule:
     input:
         temporary_tex_files(root=paths.user().preprocess),
         "showyourwork.yml",
-        compile_dir=paths.user().preprocess.as_posix()
+        compile_dir=paths.user().preprocess.as_posix(),
     output:
-        (paths.user().preprocess / "showyourwork.xml").as_posix()
+        (paths.user().preprocess / "showyourwork.xml").as_posix(),
     conda:
         tectonic_yml.as_posix()
     params:
-        user_args=" ".join(config["user_args"])
+        user_args=" ".join(config["user_args"]),
     shell:
         """
         cd "{input.compile_dir}"
@@ -67,6 +71,7 @@ rule:
             {params.user_args}        \\
             "{input[0]}"
         """
+
 
 rule:
     """
@@ -91,7 +96,7 @@ rule:
     message:
         "Preprocess: Setting up the workflow..."
     input:
-        (paths.user().preprocess / "showyourwork.xml").as_posix()
+        (paths.user().preprocess / "showyourwork.xml").as_posix(),
     output:
         config["config_json"],
     script:

@@ -11,7 +11,6 @@ fignum = 1
 graphics_with_rules = []
 
 for figure_name in figures:
-
     # Get figure metadata
     figscript = figures[figure_name]["script"]
     graphics = figures[figure_name]["graphics"]
@@ -49,12 +48,12 @@ for figure_name in figures:
         input:
             figscript,
             dependencies,
-            "environment.yml" if not static else []
+            "environment.yml" if not static else [],
         output:
-            report(graphics, category="Figure")
+            report(graphics, category="Figure"),
         conda:
             (paths.user().repo / "environment.yml").as_posix()
         params:
-            command=command
+            command=command,
         shell:
             "{params.command}"
