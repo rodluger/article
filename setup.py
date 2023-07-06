@@ -26,7 +26,7 @@ setup(
         "click>=8.1.3",
         "cookiecutter>=2.1.1",
         "packaging>=21.3",
-        "snakemake==7.15.2",
+        "snakemake==7.20.0",
     ],
     extras_require={
         "tests": [

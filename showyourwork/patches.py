@@ -432,6 +432,7 @@ def job_is_cached(job):
     cache = snakemake.workflow.workflow.output_file_cache
 
     # Check if user requested caching for job
+    # if snakemake.workflow.workflow.get_cache_mode(job.rule) != "all":
     if not snakemake.workflow.workflow.is_cached_rule(job.rule):
         logger.debug(f"Job {job.name} is not cacheable.")
         return False
@@ -449,7 +450,12 @@ def job_is_cached(job):
         return False
 
     # Check if a remote cache exists
-    branch = snakemake.workflow.config["git_branch"]
+    branch = snakemake.workflow.config.get("git_branch", None)
+    if branch is None:
+        logger.debug(
+            f"Not running with showyourwork; cache miss for job {job.name}."
+        )
+        return False
     zenodo_doi = snakemake.workflow.config["cache"][branch]["zenodo"]
     sandbox_doi = snakemake.workflow.config["cache"][branch]["sandbox"]
     if not zenodo_doi and not sandbox_doi:
@@ -555,6 +561,8 @@ def patch_snakemake_cache_optimization(dag):
 
         # Patch the Snakemake method that executes jobs
         scheduler = snakemake.workflow.workflow.scheduler
+        print(snakemake.workflow.workflow)
+        assert scheduler is not None
         for executor in scheduler._executor, scheduler._local_executor:
             if executor:
                 # Original method
