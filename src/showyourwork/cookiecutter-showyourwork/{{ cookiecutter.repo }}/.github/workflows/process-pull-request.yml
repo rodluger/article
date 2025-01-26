@@ -8,6 +8,7 @@ on:
 jobs:
   process-pr:
     runs-on: ubuntu-latest
+    permissions: write-all
     name: Process pull request
     steps:
       - name: Process pull request
