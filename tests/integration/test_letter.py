@@ -1,13 +1,6 @@
-import os
-
-import pytest
 from helpers import TemporaryShowyourworkRepository
 
 
-@pytest.mark.xfail(
-    os.getenv("WORKFLOW_VERSION") == "0.3.1",
-    reason="letter class not supported for showyourwork <= 0.3.1",
-)
 class TestLetter(TemporaryShowyourworkRepository):
     """
     Test setting up and building an article that uses the basic `letter` documentclass.
