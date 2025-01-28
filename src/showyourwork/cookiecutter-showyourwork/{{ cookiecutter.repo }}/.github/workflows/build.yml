@@ -7,6 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build the article PDF
+    permissions: write-all
     concurrency: showyourwork-${{ "{{" }} github.ref {{ "}}" }}
     steps:
       - name: Checkout
