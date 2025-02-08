@@ -61,3 +61,14 @@ to use the latest unreleased version of the action:
         env:
           SANDBOX_TOKEN: ${{ secrets.SANDBOX_TOKEN }}
           OVERLEAF_TOKEN: ${{ secrets.OVERLEAF_TOKEN }}
+
+`KeyError: 'tex_files_out' (#400) <https://github.com/showyourwork/showyourwork/issues/400>`_
+-----------------------------------------------------------------------------------------------------------------------------------------
+
+This error should arise only if you are using showyourwork v0.4.3
+or if you updated your project ot that specific version.
+
+If this is your case and you do not want to update showyourwork
+to the latest development version, please comment line 405 in
+`src/showyourwork/workflow/scripts/preprocess.py` which should be
+`if graphic not in config["tex_files_out"]`.
