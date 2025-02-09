@@ -407,54 +407,34 @@ for a brief discussion.
 Using LaTeX Workshop in VSCode
 ------------------------------
 
-If you edit and build your articles in `VSCode <https://code.visualstudio.com/>`_, you need to specify some settings so that VSCode knows to use |showyourwork| to build your document.
-You can do this by creating (or editing) a workspace-specific settings file, `.vscode/settings.json`, in the root directory of your repo.
-At minimum, you should add the following lines:
+If you edit and build your articles in `VSCode <https://code.visualstudio.com/>`_,
+you need to specify some settings so that VSCode knows
+to use |showyourwork| to build your document.
+
+Any new |showyourwork| comes with a default behaviour defines in the
+workspace-specific settings file, ``.vscode/settings.json``, in the root directory of the repo.
+with the following lines:
 
 .. code-block:: python
 
     {
-
-        # other settings here
-
-        "latex-workshop.latex.external.build.command": "showyourwork",
-        "latex-workshop.latex.external.build.args": [],
-        "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%",
-        "latex-workshop.view.pdf.viewer": "tab"
-
+      "latex-workshop.latex.external.build.command": "showyourwork",
+      "latex-workshop.latex.external.build.args": ["build"],
+      "latex-workshop.view.pdf.viewer": "tab",
+      "latex-workshop.latex.outDir": "%WORKSPACE_FOLDER%"
     }
 
-This enables you to build the document using ``LaTeX Workshop: Build LaTeX project`` in the command palette.
-Note that the final line tells LaTeX Workshop to open your article pdf in a VSCode tab.
-Feel free to change ``tab`` to ``browser`` if you would rather LaTeX Workshop open your article in a browser tab.
+As it is, this enables you to build the document
+using ``LaTeX Workshop: Build LaTeX project`` in the command palette
+or from the left sidebar.
 
-If you also want to use LaTeX Workshop's AutoBuild on save (or on file change), you can add the following lines to the settings file:
+You can edit this file to add more features, such as enabling AutoBuild on save.
+open your article pdf in a VSCode tab or a browser tab.
+Feel free to change ``tab`` to ``browser`` if you would rather LaTeX Workshop
+open your article in a browser tab.
 
-.. code-block:: python
-
-    {
-
-        # other settings here
-
-        "latex-workshop.latex.recipe.default": "showyourwork",
-        "latex-workshop.latex.recipes": [
-            {
-                "name": "showyourwork",
-                "tools": [
-                    "showyourwork"
-                ]
-            }
-        ],
-        "latex-workshop.latex.tools": [
-            {
-                "name": "showyourwork",
-                "command": "showyourwork",
-                "args": [],
-                "env": {}
-            },
-        ]
-
-    }
+For more details, please refer to the
+`LaTeX Workshop documentation <https://github.com/James-Yu/LaTeX-Workshop/wiki>`_.
 
 
 Figures not getting generated
