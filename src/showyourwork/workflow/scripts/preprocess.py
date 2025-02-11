@@ -401,11 +401,12 @@ def get_json_tree(xmlfile):
     ] + unlabeled_graphics
 
     # Ignore graphics that are dependencies of the texfile (such as orcid-ID.png)
-    free_floating_graphics = [
-        graphic
-        for graphic in free_floating_graphics
-        if graphic not in config["tex_files_out"]
-    ]
+    if "tex_files_out" in config:
+        free_floating_graphics = [
+            graphic
+            for graphic in free_floating_graphics
+            if graphic not in config["tex_files_out"]
+        ]
 
     # Separate into dynamic and static figures
     free_floating_static = list(
